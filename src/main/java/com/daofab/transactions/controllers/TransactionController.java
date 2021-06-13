@@ -28,18 +28,13 @@ public class TransactionController {
             throws IOException, DaoFabException {
 
 
-        return new ResponseEntity<>(transactionService.getParentTransactions(size, page),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(transactionService.getParentTransactions(size, page), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(value = "/test/{id}" )
-    public ResponseEntity<String> test(@PathVariable(value = "id") int id){
-        System.out.println(id);
-        return new ResponseEntity<String>("aaaa",HttpStatus.ACCEPTED);
-    }
     @GetMapping(value = "/api/parent/{id}/children")
     public ResponseEntity<List<Child>> getChildrenByParent(@PathVariable(value = "id") int id)
             throws IOException, DaoFabException {
-        System.out.println(id);
-        return new ResponseEntity<>(transactionService.getChildrenByParentId(id),HttpStatus.ACCEPTED);
+
+        return new ResponseEntity<>(transactionService.getChildrenByParentId(id), HttpStatus.ACCEPTED);
     }
 }

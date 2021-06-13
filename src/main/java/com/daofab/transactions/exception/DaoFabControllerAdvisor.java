@@ -28,7 +28,7 @@ public class DaoFabControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(IOException.class)
-    public ResponseEntity<Object> handleCityNotFoundException(
+    public ResponseEntity<Object> handleIoException(
             IOException ex, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
@@ -43,4 +43,6 @@ public class DaoFabControllerAdvisor extends ResponseEntityExceptionHandler {
         LocalDateTime now = LocalDateTime.now();
         return  dtf.format(now);
     }
+
+
 }
