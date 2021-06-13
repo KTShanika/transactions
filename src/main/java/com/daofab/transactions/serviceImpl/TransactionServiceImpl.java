@@ -53,7 +53,6 @@ public class TransactionServiceImpl implements TransactionService {
         Map<String, List<Parent>> parentMap = objectmapper.readValue(parentInputStream, Map.class);
         Map<String, List<Child>> childMap = objectmapper.readValue(childInputStream, Map.class);
 
-
         List<Parent> parentList = parentMap.containsKey(dataKey) ? parentMap.get(dataKey) : new ArrayList<>();
         List<Child> childList = childMap.containsKey(dataKey) ? childMap.get(dataKey) : new ArrayList<>();
         parentList = objectmapper.convertValue(parentList, new TypeReference<List<Parent>>() {
@@ -80,5 +79,24 @@ public class TransactionServiceImpl implements TransactionService {
 
         logger.info("Successfully completed");
         return pagedParentList;
+    }
+
+    public List<Child> getChildrenByParentId(int parentId) throws DaoFabException, IOException {
+        List<Child> childrenList = new ArrayList<>();
+
+        if (parentId <= 0) {
+            logger.error("Invalid parameters: size = {}", parentId);
+            throw new DaoFabException(HttpStatus.BAD_REQUEST.value(), "Invalid parent Id");
+        }
+
+        InputStream childInputStream = TypeReference.class.getResourceAsStream(childJson);
+        Map<String, List<Child>> childMap = objectmapper.readValue(childInputStream, Map.class);
+        List<Child> childList = childMap.containsKey(dataKey) ? childMap.get(dataKey) : new ArrayList<>();
+        List<Child> childListFinal = objectmapper.convertValue(childList, new TypeReference<List<Child>>() {});
+
+        childListFinal.stream().filter(child -> child.getParentId() == parentId)
+                .forEach(child -> childrenList.add(child));
+
+        return childrenList;
     }
 }
